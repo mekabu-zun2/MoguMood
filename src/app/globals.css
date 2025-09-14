@@ -1,0 +1,1743 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* モバイルファーストのベーススタイル */
+@layer base {
+  html {
+    font-size: 16px;
+  }
+  
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+}
+
+/* タッチフレンドリーなコンポーネント (要件 7.2) */
+@layer components {
+  .touch-target {
+    @apply min-h-touch min-w-touch;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-600 text-white px-4 py-3 rounded-lg font-medium touch-target hover:bg-blue-700 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium touch-target hover:bg-gray-300 transition-colors;
+  }
+
+  /* モード切替コンポーネント */
+  .mode-toggle {
+    @apply w-full;
+  }
+
+  .mode-toggle__label {
+    @apply mb-3;
+  }
+
+  .mode-toggle__container {
+    @apply grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-lg;
+  }
+
+  .mode-toggle__option {
+    @apply flex flex-col items-center p-3 rounded-md transition-all duration-200 touch-target;
+    @apply bg-white border-2 border-transparent;
+    @apply hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+
+  .mode-toggle__option--active {
+    @apply bg-blue-600 text-white border-blue-600;
+    @apply hover:bg-blue-700;
+  }
+
+  .mode-toggle__option--disabled {
+    @apply opacity-50 cursor-not-allowed;
+    @apply hover:bg-white;
+  }
+
+  .mode-toggle__icon {
+    @apply mb-2;
+  }
+
+  .mode-toggle__content {
+    @apply text-center;
+  }
+
+  .mode-toggle__title {
+    @apply text-sm font-medium;
+  }
+
+  .mode-toggle__description {
+    @apply text-xs opacity-75 mt-1;
+  }
+
+  /* シンプルトグル */
+  .simple-toggle {
+    @apply inline-block;
+  }
+
+  .simple-toggle__track {
+    @apply relative inline-flex items-center justify-between;
+    @apply bg-gray-200 rounded-full cursor-pointer transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+
+  .simple-toggle--sm .simple-toggle__track {
+    @apply w-16 h-8 px-1;
+  }
+
+  .simple-toggle--md .simple-toggle__track {
+    @apply w-20 h-10 px-1;
+  }
+
+  .simple-toggle--lg .simple-toggle__track {
+    @apply w-24 h-12 px-1;
+  }
+
+  .simple-toggle__thumb {
+    @apply absolute bg-white rounded-full shadow-md transition-transform duration-200;
+    @apply left-1 top-1;
+  }
+
+  .simple-toggle--sm .simple-toggle__thumb {
+    @apply w-6 h-6;
+  }
+
+  .simple-toggle--md .simple-toggle__thumb {
+    @apply w-8 h-8;
+  }
+
+  .simple-toggle--lg .simple-toggle__thumb {
+    @apply w-10 h-10;
+  }
+
+  .simple-toggle__thumb--right {
+    @apply transform translate-x-8;
+  }
+
+  .simple-toggle--sm .simple-toggle__thumb--right {
+    @apply translate-x-8;
+  }
+
+  .simple-toggle--md .simple-toggle__thumb--right {
+    @apply translate-x-10;
+  }
+
+  .simple-toggle--lg .simple-toggle__thumb--right {
+    @apply translate-x-12;
+  }
+
+  .simple-toggle__labels {
+    @apply flex justify-between items-center w-full px-2 text-xs font-medium;
+  }
+
+  .simple-toggle__label {
+    @apply text-gray-600 transition-colors duration-200;
+  }
+
+  .simple-toggle__label--active {
+    @apply text-blue-600;
+  }
+
+  /* 気分入力コンポーネント */
+  .mood-input {
+    @apply w-full;
+  }
+
+  .mood-input__label {
+    @apply flex justify-between items-center mb-2;
+  }
+
+  .mood-input__char-count {
+    @apply text-xs text-gray-500;
+  }
+
+  .mood-input__char-count--warning {
+    @apply text-yellow-600;
+  }
+
+  .mood-input__char-count--error {
+    @apply text-red-600;
+  }
+
+  .mood-input__container {
+    @apply relative border-2 border-gray-200 rounded-lg transition-colors duration-200;
+    @apply focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-20;
+  }
+
+  .mood-input__container--focused {
+    @apply border-blue-500;
+  }
+
+  .mood-input__container--error {
+    @apply border-red-500;
+    @apply focus-within:border-red-500 focus-within:ring-red-500;
+  }
+
+  .mood-input__container--disabled {
+    @apply bg-gray-50 border-gray-200 opacity-60;
+  }
+
+  .mood-input__textarea {
+    @apply w-full p-3 bg-transparent resize-none outline-none;
+    @apply text-gray-900 placeholder-gray-400;
+    @apply min-h-[80px] max-h-[200px];
+  }
+
+  .mood-input__textarea:disabled {
+    @apply cursor-not-allowed;
+  }
+
+  .mood-input__loading {
+    @apply absolute top-3 right-3;
+  }
+
+  .mood-input__spinner {
+    @apply w-5 h-5 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin;
+  }
+
+  .mood-input__error {
+    @apply flex items-center mt-2 text-sm text-red-600;
+  }
+
+  .mood-input__error-icon {
+    @apply mr-2 flex-shrink-0;
+  }
+
+  .mood-input__help {
+    @apply mt-2;
+  }
+
+  /* シンプル気分入力 */
+  .simple-mood-input {
+    @apply w-full;
+  }
+
+  .simple-mood-input__field {
+    @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg;
+    @apply focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none;
+    @apply text-gray-900 placeholder-gray-400 transition-colors duration-200;
+    @apply touch-target;
+  }
+
+  .simple-mood-input__field:disabled {
+    @apply bg-gray-50 cursor-not-allowed opacity-60;
+  }
+
+  /* 気分候補 */
+  .mood-suggestions {
+    @apply mt-4 p-4 bg-gray-50 rounded-lg;
+  }
+
+  .mood-suggestions__title {
+    @apply mb-3;
+  }
+
+  .mood-suggestions__list {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .mood-suggestions__item {
+    @apply px-3 py-2 text-sm bg-white border border-gray-200 rounded-full;
+    @apply hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  /* 半径スライダーコンポーネント */
+  .radius-slider {
+    @apply w-full;
+  }
+
+  .radius-slider__header {
+    @apply flex justify-between items-center mb-4;
+  }
+
+  .radius-slider__label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .radius-slider__value {
+    @apply text-sm font-semibold text-blue-600;
+  }
+
+  .radius-slider__container {
+    @apply relative px-2 py-4;
+  }
+
+  .radius-slider__track {
+    @apply relative w-full h-2 bg-gray-200 rounded-full cursor-pointer;
+    @apply touch-target;
+  }
+
+  .radius-slider__track--disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .radius-slider__progress {
+    @apply absolute top-0 left-0 h-full bg-blue-600 rounded-full transition-all duration-150;
+  }
+
+  .radius-slider__marker {
+    @apply absolute top-0 transform -translate-x-1/2;
+  }
+
+  .radius-slider__marker-dot {
+    @apply w-2 h-2 bg-gray-400 rounded-full;
+  }
+
+  .radius-slider__marker-label {
+    @apply absolute top-4 left-1/2 transform -translate-x-1/2;
+    @apply text-xs text-gray-500 whitespace-nowrap;
+  }
+
+  .radius-slider__thumb {
+    @apply absolute top-1/2 w-6 h-6 bg-white border-2 border-blue-600 rounded-full;
+    @apply transform -translate-x-1/2 -translate-y-1/2 cursor-grab;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50;
+    @apply transition-all duration-150 shadow-md;
+    @apply touch-target;
+  }
+
+  .radius-slider__thumb--dragging {
+    @apply cursor-grabbing scale-110 shadow-lg;
+  }
+
+  .radius-slider__thumb--disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .radius-slider__help {
+    @apply mt-2;
+  }
+
+  /* シンプル半径選択 */
+  .simple-radius-selector {
+    @apply w-full;
+  }
+
+  .simple-radius-selector__label {
+    @apply mb-3;
+  }
+
+  .simple-radius-selector__options {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .simple-radius-selector__option {
+    @apply px-4 py-2 text-sm border-2 border-gray-200 rounded-lg;
+    @apply hover:border-blue-300 hover:bg-blue-50;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .simple-radius-selector__option--active {
+    @apply border-blue-600 bg-blue-600 text-white;
+    @apply hover:border-blue-700 hover:bg-blue-700;
+  }
+
+  .simple-radius-selector__option:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    @apply hover:border-gray-200 hover:bg-transparent;
+  }
+
+  /* 半径入力フィールド */
+  .radius-input {
+    @apply w-full;
+  }
+
+  .radius-input__label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+
+  .radius-input__field {
+    @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg;
+    @apply focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none;
+    @apply text-gray-900 transition-colors duration-200;
+    @apply touch-target;
+  }
+
+  .radius-input__field:disabled {
+    @apply bg-gray-50 cursor-not-allowed opacity-60;
+  }
+
+  /* 駅数カウンターコンポーネント */
+  .station-counter {
+    @apply w-full;
+  }
+
+  .station-counter__label {
+    @apply flex items-center mb-3;
+  }
+
+  .station-counter__container {
+    @apply flex items-center justify-center border-2 border-gray-200 rounded-lg;
+    @apply focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-20;
+  }
+
+  .station-counter__container--focused {
+    @apply border-blue-500;
+  }
+
+  .station-counter__container--disabled {
+    @apply bg-gray-50 opacity-60;
+  }
+
+  .station-counter__button {
+    @apply flex items-center justify-center w-12 h-12 text-gray-600;
+    @apply hover:text-blue-600 hover:bg-blue-50;
+    @apply focus:outline-none focus:text-blue-600;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .station-counter__button--disabled {
+    @apply text-gray-300 cursor-not-allowed;
+    @apply hover:text-gray-300 hover:bg-transparent;
+  }
+
+  .station-counter__button--decrement {
+    @apply rounded-l-md;
+  }
+
+  .station-counter__button--increment {
+    @apply rounded-r-md;
+  }
+
+  .station-counter__value {
+    @apply flex-1 flex flex-col items-center justify-center py-3 px-4;
+    @apply focus:outline-none;
+  }
+
+  .station-counter__number {
+    @apply text-2xl font-bold text-gray-900;
+  }
+
+  .station-counter__unit {
+    @apply text-sm text-gray-500;
+  }
+
+  .station-counter__help {
+    @apply mt-2;
+  }
+
+  /* 駅数セレクト */
+  .station-select {
+    @apply w-full;
+  }
+
+  .station-select__label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+
+  .station-select__field {
+    @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg;
+    @apply focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none;
+    @apply text-gray-900 bg-white transition-colors duration-200;
+    @apply touch-target;
+  }
+
+  .station-select__field:disabled {
+    @apply bg-gray-50 cursor-not-allowed opacity-60;
+  }
+
+  /* 駅数ボタン選択 */
+  .station-buttons {
+    @apply w-full;
+  }
+
+  .station-buttons__label {
+    @apply mb-3;
+  }
+
+  .station-buttons__options {
+    @apply flex gap-2;
+  }
+
+  .station-buttons__option {
+    @apply flex-1 flex flex-col items-center py-3 px-4;
+    @apply border-2 border-gray-200 rounded-lg;
+    @apply hover:border-blue-300 hover:bg-blue-50;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .station-buttons__option--active {
+    @apply border-blue-600 bg-blue-600 text-white;
+    @apply hover:border-blue-700 hover:bg-blue-700;
+  }
+
+  .station-buttons__option:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    @apply hover:border-gray-200 hover:bg-transparent;
+  }
+
+  .station-buttons__number {
+    @apply text-lg font-bold;
+  }
+
+  .station-buttons__unit {
+    @apply text-xs opacity-75;
+  }
+
+  /* 駅数スライダー */
+  .station-slider {
+    @apply w-full;
+  }
+
+  .station-slider__header {
+    @apply flex justify-between items-center mb-4;
+  }
+
+  .station-slider__label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .station-slider__value {
+    @apply text-sm font-semibold text-blue-600;
+  }
+
+  .station-slider__container {
+    @apply relative px-2 py-4;
+  }
+
+  .station-slider__input {
+    @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50;
+  }
+
+  .station-slider__input::-webkit-slider-thumb {
+    @apply appearance-none w-6 h-6 bg-blue-600 rounded-full cursor-pointer;
+    @apply hover:bg-blue-700 transition-colors duration-150;
+  }
+
+  .station-slider__input::-moz-range-thumb {
+    @apply w-6 h-6 bg-blue-600 rounded-full cursor-pointer border-0;
+    @apply hover:bg-blue-700 transition-colors duration-150;
+  }
+
+  .station-slider__track {
+    @apply absolute top-1/2 left-2 right-2 h-2 bg-gray-200 rounded-lg pointer-events-none;
+    @apply transform -translate-y-1/2;
+  }
+
+  .station-slider__progress {
+    @apply h-full bg-blue-600 rounded-lg transition-all duration-150;
+  }
+
+  .station-slider__markers {
+    @apply absolute top-8 left-2 right-2;
+  }
+
+  .station-slider__marker {
+    @apply absolute transform -translate-x-1/2;
+  }
+
+  .station-slider__marker-dot {
+    @apply w-2 h-2 bg-gray-400 rounded-full;
+  }
+
+  .station-slider__marker-label {
+    @apply absolute top-3 left-1/2 transform -translate-x-1/2;
+    @apply text-xs text-gray-500;
+  }
+
+  /* 検索フォームコンポーネント */
+  .search-form {
+    @apply w-full max-w-md mx-auto space-y-6;
+  }
+
+  .search-form__location-status {
+    @apply mb-4;
+  }
+
+  .search-form__location-loading {
+    @apply flex items-center p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700;
+  }
+
+  .search-form__location-error {
+    @apply flex items-center p-3 bg-red-50 border border-red-200 rounded-lg text-red-700;
+  }
+
+  .search-form__location-success {
+    @apply flex items-center p-3 bg-green-50 border border-green-200 rounded-lg text-green-700;
+  }
+
+  .search-form__spinner {
+    @apply w-4 h-4 mr-2 border-2 border-current border-t-transparent rounded-full animate-spin;
+  }
+
+  .search-form__error-icon,
+  .search-form__success-icon {
+    @apply mr-2 flex-shrink-0;
+  }
+
+  .search-form__retry-button {
+    @apply ml-auto px-3 py-1 text-sm bg-red-100 hover:bg-red-200 rounded;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200;
+  }
+
+  .search-form__section {
+    @apply space-y-4;
+  }
+
+  .search-form__error {
+    @apply flex items-center p-3 bg-red-50 border border-red-200 rounded-lg text-red-700;
+  }
+
+  .search-form__actions {
+    @apply pt-2;
+  }
+
+  .search-form__submit-button {
+    @apply w-full flex items-center justify-center px-6 py-4;
+    @apply bg-blue-600 text-white font-medium rounded-lg;
+    @apply hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .search-form__submit-button--disabled {
+    @apply bg-gray-300 text-gray-500 cursor-not-allowed;
+    @apply hover:bg-gray-300;
+  }
+
+  .search-form__button-spinner {
+    @apply w-5 h-5 mr-2 border-2 border-current border-t-transparent rounded-full animate-spin;
+  }
+
+  .search-form__search-icon {
+    @apply mr-2;
+  }
+
+  .search-form__mood-result {
+    @apply p-4 bg-gray-50 border border-gray-200 rounded-lg;
+  }
+
+  .search-form__mood-result-title {
+    @apply text-sm font-medium text-gray-700 mb-2;
+  }
+
+  .search-form__mood-result-tags {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .search-form__mood-tag {
+    @apply px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full;
+  }
+
+  /* シンプル検索フォーム */
+  .simple-search-form {
+    @apply w-full;
+  }
+
+  .simple-search-form__input-group {
+    @apply flex border-2 border-gray-200 rounded-lg overflow-hidden;
+    @apply focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-20;
+  }
+
+  .simple-search-form__input {
+    @apply flex-1 px-4 py-3 bg-transparent outline-none;
+    @apply text-gray-900 placeholder-gray-400;
+  }
+
+  .simple-search-form__input:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  .simple-search-form__button {
+    @apply px-4 py-3 bg-blue-600 text-white;
+    @apply hover:bg-blue-700 focus:outline-none focus:bg-blue-700;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .simple-search-form__button:disabled {
+    @apply bg-gray-300 cursor-not-allowed;
+    @apply hover:bg-gray-300;
+  }
+
+  .simple-search-form__spinner {
+    @apply w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin;
+  }
+
+  /* 検索結果カードコンポーネント */
+  .result-card {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden;
+    @apply transition-all duration-200;
+  }
+
+  .result-card--clickable {
+    @apply cursor-pointer hover:shadow-md hover:border-gray-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+  }
+
+  .result-card__image-container {
+    @apply relative h-48 bg-gray-100;
+  }
+
+  .result-card__image {
+    @apply w-full h-full object-cover transition-opacity duration-200;
+  }
+
+  .result-card__image--loading {
+    @apply opacity-0;
+  }
+
+  .result-card__image-placeholder {
+    @apply absolute inset-0 flex items-center justify-center bg-gray-100;
+  }
+
+  .result-card__image-spinner {
+    @apply w-8 h-8 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin;
+  }
+
+  .result-card__image-fallback {
+    @apply w-full h-full flex items-center justify-center bg-gray-100 text-gray-400;
+  }
+
+  .result-card__fallback-icon {
+    @apply w-12 h-12;
+  }
+
+  .result-card__rating-badge {
+    @apply absolute top-2 right-2 flex items-center px-2 py-1;
+    @apply bg-yellow-400 text-yellow-900 text-xs font-medium rounded-full;
+  }
+
+  .result-card__star-icon {
+    @apply mr-1;
+  }
+
+  .result-card__content {
+    @apply p-4 space-y-3;
+  }
+
+  .result-card__header {
+    @apply flex items-start justify-between;
+  }
+
+  .result-card__name {
+    @apply text-lg font-semibold text-gray-900 line-clamp-2 flex-1 mr-2;
+  }
+
+  .result-card__price {
+    @apply text-sm font-medium text-green-600 flex-shrink-0;
+  }
+
+  .result-card__meta {
+    @apply space-y-2;
+  }
+
+  .result-card__types {
+    @apply flex flex-wrap gap-1;
+  }
+
+  .result-card__type-tag {
+    @apply px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full;
+  }
+
+  .result-card__location {
+    @apply flex items-center gap-3 text-sm text-gray-600;
+  }
+
+  .result-card__distance,
+  .result-card__station {
+    @apply flex items-center gap-1;
+  }
+
+  .result-card__location-icon,
+  .result-card__station-icon {
+    @apply flex-shrink-0;
+  }
+
+  .result-card__vicinity {
+    @apply text-sm text-gray-500 line-clamp-2;
+  }
+
+  .result-card__actions {
+    @apply pt-2;
+  }
+
+  .result-card__maps-button {
+    @apply w-full flex items-center justify-center px-4 py-2;
+    @apply bg-blue-600 text-white text-sm font-medium rounded-md;
+    @apply hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .result-card__maps-icon {
+    @apply mr-2;
+  }
+
+  /* コンパクト検索結果カード */
+  .compact-result-card {
+    @apply flex items-center p-3 bg-white border border-gray-200 rounded-lg;
+    @apply transition-all duration-200;
+  }
+
+  .compact-result-card--clickable {
+    @apply cursor-pointer hover:shadow-sm hover:border-gray-300;
+  }
+
+  .compact-result-card__content {
+    @apply flex-1 min-w-0;
+  }
+
+  .compact-result-card__header {
+    @apply flex items-center justify-between mb-1;
+  }
+
+  .compact-result-card__name {
+    @apply text-sm font-medium text-gray-900 truncate flex-1 mr-2;
+  }
+
+  .compact-result-card__rating {
+    @apply flex items-center text-xs text-yellow-600;
+  }
+
+  .compact-result-card__star {
+    @apply mr-1;
+  }
+
+  .compact-result-card__meta {
+    @apply flex items-center gap-2 text-xs text-gray-500;
+  }
+
+  .compact-result-card__distance,
+  .compact-result-card__price {
+    @apply flex-shrink-0;
+  }
+
+  .compact-result-card__maps-button {
+    @apply ml-3 p-2 text-blue-600 hover:bg-blue-50 rounded-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  /* 検索結果カードスケルトン */
+  .result-card-skeleton {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden;
+  }
+
+  .result-card-skeleton__image {
+    @apply h-48 bg-gray-200 animate-pulse;
+  }
+
+  .result-card-skeleton__content {
+    @apply p-4 space-y-3;
+  }
+
+  .result-card-skeleton__header {
+    @apply flex items-start justify-between;
+  }
+
+  .result-card-skeleton__name {
+    @apply h-6 bg-gray-200 rounded flex-1 mr-2 animate-pulse;
+  }
+
+  .result-card-skeleton__price {
+    @apply h-4 w-12 bg-gray-200 rounded animate-pulse;
+  }
+
+  .result-card-skeleton__meta {
+    @apply flex gap-2;
+  }
+
+  .result-card-skeleton__type {
+    @apply h-4 w-16 bg-gray-200 rounded animate-pulse;
+  }
+
+  .result-card-skeleton__distance {
+    @apply h-4 w-12 bg-gray-200 rounded animate-pulse;
+  }
+
+  .result-card-skeleton__vicinity {
+    @apply h-4 w-3/4 bg-gray-200 rounded animate-pulse;
+  }
+
+  .result-card-skeleton__button {
+    @apply h-10 bg-gray-200 rounded animate-pulse;
+  }
+
+  /* ユーティリティクラス */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* 検索結果一覧コンポーネント */
+  .result-list {
+    @apply w-full;
+  }
+
+  .result-list--error,
+  .result-list--loading,
+  .result-list--empty {
+    @apply min-h-[400px] flex items-center justify-center;
+  }
+
+  .result-list__error,
+  .result-list__empty {
+    @apply text-center max-w-sm mx-auto p-6;
+  }
+
+  .result-list__error-icon,
+  .result-list__empty-icon {
+    @apply mx-auto mb-4 text-gray-400;
+  }
+
+  .result-list__error-title,
+  .result-list__empty-title {
+    @apply text-lg font-semibold text-gray-900 mb-2;
+  }
+
+  .result-list__error-message,
+  .result-list__empty-message {
+    @apply text-gray-600 mb-4;
+  }
+
+  .result-list__retry-button {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-lg;
+    @apply hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .result-list__empty-suggestions {
+    @apply text-left bg-gray-50 p-4 rounded-lg;
+  }
+
+  .result-list__loading {
+    @apply text-center mb-8;
+  }
+
+  .result-list__spinner {
+    @apply w-8 h-8 mx-auto mb-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin;
+  }
+
+  .result-list__loading-text {
+    @apply text-gray-600;
+  }
+
+  .result-list__skeleton {
+    @apply space-y-4;
+  }
+
+  .result-list__skeleton--compact {
+    @apply space-y-2;
+  }
+
+  .result-list__header {
+    @apply flex items-center justify-between mb-6;
+  }
+
+  .result-list__title {
+    @apply text-xl font-semibold text-gray-900;
+  }
+
+  .result-list__controls {
+    @apply flex items-center gap-2;
+  }
+
+  .result-list__grid {
+    @apply space-y-4;
+  }
+
+  .result-list__grid--card {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .result-list__grid--compact {
+    @apply space-y-2;
+  }
+
+  .result-list__load-more-loading {
+    @apply flex items-center justify-center py-6 text-gray-600;
+  }
+
+  .result-list__load-more-loading .result-list__spinner {
+    @apply w-5 h-5 mr-2 mb-0;
+  }
+
+  .result-list__load-trigger {
+    @apply h-4;
+  }
+
+  .result-list__load-more {
+    @apply text-center py-6;
+  }
+
+  .result-list__load-more-button {
+    @apply px-6 py-3 bg-gray-100 text-gray-700 rounded-lg;
+    @apply hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .result-list__end-message {
+    @apply py-6;
+  }
+
+  /* 検索結果統計 */
+  .result-stats {
+    @apply mb-6 p-4 bg-gray-50 rounded-lg;
+  }
+
+  .result-stats__grid {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-4;
+  }
+
+  .result-stats__item {
+    @apply text-center;
+  }
+
+  .result-stats__value {
+    @apply flex items-center justify-center text-lg font-semibold text-gray-900 mb-1;
+  }
+
+  .result-stats__star {
+    @apply mr-1 text-yellow-500;
+  }
+
+  .result-stats__label {
+    @apply text-xs text-gray-500;
+  }
+
+  /* レスポンシブ対応 */
+  @media (max-width: 640px) {
+    .result-list__grid--card {
+      @apply grid-cols-1;
+    }
+    
+    .result-list__header {
+      @apply flex-col items-start gap-2;
+    }
+    
+    .result-stats__grid {
+      @apply grid-cols-2;
+    }
+  }
+
+  /* ローディングコンポーネント */
+  .loader {
+    @apply flex items-center justify-center;
+  }
+
+  .loader--fullscreen {
+    @apply fixed inset-0 z-50 bg-white;
+  }
+
+  .loader--overlay {
+    @apply absolute inset-0 bg-black bg-opacity-50;
+  }
+
+  .loader__content {
+    @apply flex flex-col items-center;
+  }
+
+  .loader__text {
+    @apply mt-3 text-sm font-medium;
+  }
+
+  /* サイズ */
+  .loader--sm .spinner-loader__circle {
+    @apply w-4 h-4;
+  }
+
+  .loader--md .spinner-loader__circle {
+    @apply w-6 h-6;
+  }
+
+  .loader--lg .spinner-loader__circle {
+    @apply w-8 h-8;
+  }
+
+  .loader--xl .spinner-loader__circle {
+    @apply w-12 h-12;
+  }
+
+  /* カラー */
+  .loader--primary {
+    @apply text-blue-600;
+  }
+
+  .loader--secondary {
+    @apply text-gray-600;
+  }
+
+  .loader--white {
+    @apply text-white;
+  }
+
+  .loader--gray {
+    @apply text-gray-400;
+  }
+
+  /* スピナーローダー */
+  .spinner-loader__circle {
+    @apply border-2 border-current border-t-transparent rounded-full animate-spin;
+  }
+
+  /* ドットローダー */
+  .dots-loader {
+    @apply flex space-x-1;
+  }
+
+  .dots-loader__dot {
+    @apply w-2 h-2 bg-current rounded-full animate-bounce;
+  }
+
+  .dots-loader__dot--1 {
+    animation-delay: 0ms;
+  }
+
+  .dots-loader__dot--2 {
+    animation-delay: 150ms;
+  }
+
+  .dots-loader__dot--3 {
+    animation-delay: 300ms;
+  }
+
+  /* パルスローダー */
+  .pulse-loader {
+    @apply relative;
+  }
+
+  .pulse-loader__circle {
+    @apply absolute w-6 h-6 bg-current rounded-full animate-ping;
+  }
+
+  .pulse-loader__circle--1 {
+    animation-delay: 0ms;
+  }
+
+  .pulse-loader__circle--2 {
+    animation-delay: 1000ms;
+  }
+
+  /* バーローダー */
+  .bars-loader {
+    @apply flex items-end space-x-1;
+  }
+
+  .bars-loader__bar {
+    @apply w-1 bg-current animate-pulse;
+  }
+
+  .bars-loader__bar--1 {
+    @apply h-4;
+    animation-delay: 0ms;
+  }
+
+  .bars-loader__bar--2 {
+    @apply h-6;
+    animation-delay: 150ms;
+  }
+
+  .bars-loader__bar--3 {
+    @apply h-4;
+    animation-delay: 300ms;
+  }
+
+  .bars-loader__bar--4 {
+    @apply h-2;
+    animation-delay: 450ms;
+  }
+
+  /* インラインローダー */
+  .inline-loader {
+    @apply inline-flex items-center;
+  }
+
+  .inline-loader__spinner {
+    @apply border border-current border-t-transparent rounded-full animate-spin;
+  }
+
+  .inline-loader--xs .inline-loader__spinner {
+    @apply w-3 h-3;
+  }
+
+  .inline-loader--sm .inline-loader__spinner {
+    @apply w-4 h-4;
+  }
+
+  /* ボタンローダー */
+  .button-loader__spinner {
+    @apply border-2 border-current border-t-transparent rounded-full animate-spin;
+  }
+
+  .button-loader--sm .button-loader__spinner {
+    @apply w-4 h-4;
+  }
+
+  .button-loader--md .button-loader__spinner {
+    @apply w-5 h-5;
+  }
+
+  /* スケルトン */
+  .skeleton {
+    @apply bg-gray-200 rounded;
+  }
+
+  .skeleton--pulse {
+    @apply animate-pulse;
+  }
+
+  .skeleton--wave {
+    @apply relative overflow-hidden;
+  }
+
+  .skeleton--wave::after {
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent;
+    content: '';
+    animation: skeleton-wave 1.5s infinite;
+  }
+
+  .skeleton--text {
+    @apply h-4;
+  }
+
+  .skeleton--rectangular {
+    /* デフォルトの矩形 */
+  }
+
+  .skeleton--circular {
+    @apply rounded-full;
+  }
+
+  @keyframes skeleton-wave {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* プログレスバー */
+  .progress-linear {
+    @apply w-full;
+  }
+
+  .progress-linear__track {
+    @apply w-full bg-gray-200 rounded-full overflow-hidden;
+  }
+
+  .progress-linear__bar {
+    @apply h-full bg-current transition-all duration-300 ease-out;
+  }
+
+  .progress-linear--sm .progress-linear__track {
+    @apply h-1;
+  }
+
+  .progress-linear--md .progress-linear__track {
+    @apply h-2;
+  }
+
+  .progress-linear--lg .progress-linear__track {
+    @apply h-3;
+  }
+
+  .progress-linear--primary {
+    @apply text-blue-600;
+  }
+
+  .progress-linear--success {
+    @apply text-green-600;
+  }
+
+  .progress-linear--warning {
+    @apply text-yellow-600;
+  }
+
+  .progress-linear--error {
+    @apply text-red-600;
+  }
+
+  /* ローディングオーバーレイ */
+  .loading-overlay {
+    @apply relative;
+  }
+
+  .loading-overlay__backdrop {
+    @apply absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10;
+  }
+
+  .loading-overlay__content {
+    @apply bg-white rounded-lg p-6 shadow-lg;
+  }
+
+  /* エラーメッセージコンポーネント */
+  .error-message {
+    @apply border rounded-lg;
+  }
+
+  .error-message--inline {
+    @apply p-3 bg-red-50 border-red-200 text-red-700;
+  }
+
+  .error-message--card {
+    @apply p-4 bg-red-50 border-red-200 text-red-700;
+  }
+
+  .error-message--banner {
+    @apply p-4 bg-red-600 border-red-600 text-white;
+  }
+
+  .error-message--toast {
+    @apply p-4 bg-white border-red-200 shadow-lg text-red-700;
+  }
+
+  .error-message__content {
+    @apply flex items-start;
+  }
+
+  .error-message__icon {
+    @apply flex-shrink-0 mr-3;
+  }
+
+  .error-message__icon svg {
+    @apply w-5 h-5;
+  }
+
+  .error-message__body {
+    @apply flex-1 min-w-0;
+  }
+
+  .error-message__title {
+    @apply font-medium mb-1;
+  }
+
+  .error-message__description {
+    @apply text-sm;
+  }
+
+  .error-message__recovery {
+    @apply mt-3 text-sm;
+  }
+
+  .error-message__recovery-title {
+    @apply font-medium mb-1;
+  }
+
+  .error-message__recovery-list {
+    @apply list-disc list-inside space-y-1 opacity-90;
+  }
+
+  .error-message__actions {
+    @apply flex-shrink-0 ml-3 flex items-start gap-2;
+  }
+
+  .error-message__retry-button {
+    @apply flex items-center px-3 py-1 text-sm bg-red-100 hover:bg-red-200 rounded;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200;
+  }
+
+  .error-message__retry-icon {
+    @apply mr-1;
+  }
+
+  .error-message__dismiss-button {
+    @apply p-1 hover:bg-red-100 rounded;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200;
+  }
+
+  /* トーストエラー */
+  .toast-error {
+    @apply fixed z-50 left-4 right-4 mx-auto max-w-md;
+    @apply transform transition-all duration-300 ease-out;
+    @apply translate-x-0 opacity-0 scale-95;
+  }
+
+  .toast-error--top {
+    @apply top-4;
+  }
+
+  .toast-error--bottom {
+    @apply bottom-4;
+  }
+
+  .toast-error--visible {
+    @apply opacity-100 scale-100;
+  }
+
+  /* エラーフォールバック */
+  .error-fallback {
+    @apply min-h-screen flex items-center justify-center p-4;
+  }
+
+  .error-fallback__content {
+    @apply max-w-md text-center;
+  }
+
+  .error-fallback__title {
+    @apply text-xl font-semibold text-gray-900 mb-4;
+  }
+
+  .error-fallback__message {
+    @apply text-gray-600 mb-6;
+  }
+
+  .error-fallback__actions {
+    @apply flex gap-3 justify-center mb-6;
+  }
+
+  .error-fallback__retry-button,
+  .error-fallback__reload-button {
+    @apply px-4 py-2 rounded-lg font-medium;
+    @apply focus:outline-none focus:ring-2 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  .error-fallback__retry-button {
+    @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  }
+
+  .error-fallback__reload-button {
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500;
+  }
+
+  .error-fallback__details {
+    @apply text-left bg-gray-100 p-4 rounded-lg;
+  }
+
+  .error-fallback__stack {
+    @apply text-xs text-gray-600 overflow-auto max-h-40;
+  }
+
+  /* アクセシビリティ改善 */
+  
+  /* フォーカス表示の改善 */
+  .focus-visible {
+    @apply outline-none ring-2 ring-blue-500 ring-opacity-50;
+  }
+
+  /* スクリーンリーダー専用テキスト */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* 高コントラストモード対応 */
+  @media (prefers-contrast: high) {
+    .btn-primary {
+      @apply border-2 border-blue-800;
+    }
+    
+    .btn-secondary {
+      @apply border-2 border-gray-800;
+    }
+    
+    .result-card {
+      @apply border-2 border-gray-800;
+    }
+  }
+
+  /* 動きを減らす設定への対応 */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    
+    .animate-spin,
+    .animate-pulse,
+    .animate-bounce {
+      animation: none;
+    }
+  }
+
+  /* ダークモード対応（将来の拡張用） */
+  @media (prefers-color-scheme: dark) {
+    .dark-mode-ready {
+      @apply bg-gray-900 text-white;
+    }
+  }
+
+  /* タッチデバイス用の改善 */
+  @media (hover: none) and (pointer: coarse) {
+    /* タッチデバイスでのホバー効果を無効化 */
+    .hover\:bg-blue-700:hover {
+      @apply bg-blue-600;
+    }
+    
+    .hover\:bg-gray-300:hover {
+      @apply bg-gray-200;
+    }
+    
+    /* タッチターゲットサイズの確保 */
+    button, 
+    [role="button"], 
+    input[type="button"], 
+    input[type="submit"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* 大きなフォントサイズ設定への対応 */
+  @media (min-resolution: 2dppx) {
+    body {
+      font-size: 16px;
+    }
+  }
+
+  /* スマートフォン対応の改善 */
+  @media (max-width: 480px) {
+    /* より小さな画面での調整 */
+    .container {
+      @apply px-3;
+    }
+    
+    .search-form {
+      @apply space-y-4;
+    }
+    
+    .result-card {
+      @apply text-sm;
+    }
+    
+    .result-card__name {
+      @apply text-base;
+    }
+    
+    /* フォームコントロールのサイズ調整 */
+    .mood-input__textarea {
+      @apply text-base; /* iOS Safariでのズーム防止 */
+    }
+    
+    .simple-mood-input__field {
+      @apply text-base; /* iOS Safariでのズーム防止 */
+    }
+  }
+
+  /* 横向き表示での調整 */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .search-form {
+      @apply space-y-3;
+    }
+    
+    .mood-input__textarea {
+      @apply min-h-[60px];
+    }
+  }
+
+  /* キーボードナビゲーション改善 */
+  .keyboard-navigation {
+    @apply outline-none;
+  }
+
+  .keyboard-navigation:focus-visible {
+    @apply ring-2 ring-blue-500 ring-opacity-50;
+  }
+
+  /* スキップリンク */
+  .skip-link {
+    @apply absolute -top-10 left-4 bg-blue-600 text-white px-4 py-2 rounded;
+    @apply focus:top-4 z-50 transition-all duration-200;
+  }
+
+  /* トースト通知 */
+  .toast-container {
+    @apply fixed top-4 right-4 z-50 space-y-2 max-w-sm;
+  }
+
+  .toast {
+    @apply bg-white border border-gray-200 rounded-lg shadow-lg p-4;
+    @apply transform transition-all duration-300 ease-out;
+    @apply translate-x-full opacity-0 scale-95;
+  }
+
+  .toast--visible {
+    @apply translate-x-0 opacity-100 scale-100;
+  }
+
+  .toast--removing {
+    @apply translate-x-full opacity-0 scale-95;
+  }
+
+  .toast--success {
+    @apply border-green-200 bg-green-50;
+  }
+
+  .toast--error {
+    @apply border-red-200 bg-red-50;
+  }
+
+  .toast--warning {
+    @apply border-yellow-200 bg-yellow-50;
+  }
+
+  .toast--info {
+    @apply border-blue-200 bg-blue-50;
+  }
+
+  .toast__content {
+    @apply flex items-start;
+  }
+
+  .toast__icon {
+    @apply flex-shrink-0 mr-3;
+  }
+
+  .toast__icon svg {
+    @apply w-5 h-5;
+  }
+
+  .toast-icon--success {
+    @apply text-green-600;
+  }
+
+  .toast-icon--error {
+    @apply text-red-600;
+  }
+
+  .toast-icon--warning {
+    @apply text-yellow-600;
+  }
+
+  .toast-icon--info {
+    @apply text-blue-600;
+  }
+
+  .toast__body {
+    @apply flex-1 min-w-0;
+  }
+
+  .toast__title {
+    @apply font-medium text-gray-900 mb-1;
+  }
+
+  .toast__message {
+    @apply text-sm text-gray-600;
+  }
+
+  .toast__actions {
+    @apply flex-shrink-0 ml-3 flex items-start gap-2;
+  }
+
+  .toast__action-button {
+    @apply text-sm font-medium text-blue-600 hover:text-blue-700;
+    @apply focus:outline-none focus:underline;
+  }
+
+  .toast__close-button {
+    @apply text-gray-400 hover:text-gray-600;
+    @apply focus:outline-none focus:text-gray-600;
+  }
+
+  /* ネットワーク状態 */
+  .network-status {
+    @apply fixed top-0 left-0 right-0 z-40;
+  }
+
+  .network-status--offline {
+    @apply bg-red-600 text-white;
+  }
+
+  .network-status__content {
+    @apply flex items-center justify-center p-3;
+  }
+
+  .network-status__icon {
+    @apply mr-2 flex-shrink-0;
+  }
+
+  .network-status__message {
+    @apply text-center;
+  }
+
+  .network-status__title {
+    @apply font-medium;
+  }
+
+  .network-status__description {
+    @apply text-sm opacity-90;
+  }
+
+  /* オフラインフォールバック */
+  .offline-fallback {
+    @apply min-h-screen flex items-center justify-center p-4;
+  }
+
+  .offline-fallback__content {
+    @apply text-center max-w-md;
+  }
+
+  .offline-fallback__icon {
+    @apply mx-auto mb-4 text-gray-400;
+  }
+
+  .offline-fallback__title {
+    @apply text-xl font-semibold text-gray-900 mb-2;
+  }
+
+  .offline-fallback__message {
+    @apply text-gray-600 mb-6;
+  }
+
+  .offline-fallback__retry-button {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-lg;
+    @apply hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  /* 遅延読み込み画像 */
+  .lazy-image {
+    @apply relative overflow-hidden;
+  }
+
+  .lazy-image__img {
+    @apply w-full h-full object-cover transition-opacity duration-300;
+    @apply opacity-0;
+  }
+
+  .lazy-image__img--loaded {
+    @apply opacity-100;
+  }
+
+  .lazy-image__placeholder {
+    @apply absolute inset-0 flex items-center justify-center bg-gray-100;
+  }
+
+  .lazy-image__placeholder-img {
+    @apply w-full h-full object-cover;
+  }
+
+  .lazy-image__skeleton {
+    @apply w-full h-full bg-gray-200 animate-pulse;
+  }
+
+  /* モバイル対応 */
+  @media (max-width: 640px) {
+    .toast-container {
+      @apply left-4 right-4 max-w-none;
+    }
+    
+    .toast {
+      @apply p-3;
+    }
+    
+    .toast__title {
+      @apply text-sm;
+    }
+    
+    .toast__message {
+      @apply text-xs;
+    }
+  }
+}

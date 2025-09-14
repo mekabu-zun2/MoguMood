@@ -1,0 +1,43 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Lock files (Docker環境での開発のため除外)
+# package-lock.json は CI で自動生成される
+# 本番環境では generate-lockfile.yml ワークフローで管理
+package-lock.json
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env.local
+.env.production.local
+.env.development.local
+
+# Keep test environment file for CI
+# .env.test
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
