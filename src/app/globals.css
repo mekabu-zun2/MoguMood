@@ -1550,4 +1550,194 @@
     @apply absolute -top-10 left-4 bg-blue-600 text-white px-4 py-2 rounded;
     @apply focus:top-4 z-50 transition-all duration-200;
   }
+
+  /* トースト通知 */
+  .toast-container {
+    @apply fixed top-4 right-4 z-50 space-y-2 max-w-sm;
+  }
+
+  .toast {
+    @apply bg-white border border-gray-200 rounded-lg shadow-lg p-4;
+    @apply transform transition-all duration-300 ease-out;
+    @apply translate-x-full opacity-0 scale-95;
+  }
+
+  .toast--visible {
+    @apply translate-x-0 opacity-100 scale-100;
+  }
+
+  .toast--removing {
+    @apply translate-x-full opacity-0 scale-95;
+  }
+
+  .toast--success {
+    @apply border-green-200 bg-green-50;
+  }
+
+  .toast--error {
+    @apply border-red-200 bg-red-50;
+  }
+
+  .toast--warning {
+    @apply border-yellow-200 bg-yellow-50;
+  }
+
+  .toast--info {
+    @apply border-blue-200 bg-blue-50;
+  }
+
+  .toast__content {
+    @apply flex items-start;
+  }
+
+  .toast__icon {
+    @apply flex-shrink-0 mr-3;
+  }
+
+  .toast__icon svg {
+    @apply w-5 h-5;
+  }
+
+  .toast-icon--success {
+    @apply text-green-600;
+  }
+
+  .toast-icon--error {
+    @apply text-red-600;
+  }
+
+  .toast-icon--warning {
+    @apply text-yellow-600;
+  }
+
+  .toast-icon--info {
+    @apply text-blue-600;
+  }
+
+  .toast__body {
+    @apply flex-1 min-w-0;
+  }
+
+  .toast__title {
+    @apply font-medium text-gray-900 mb-1;
+  }
+
+  .toast__message {
+    @apply text-sm text-gray-600;
+  }
+
+  .toast__actions {
+    @apply flex-shrink-0 ml-3 flex items-start gap-2;
+  }
+
+  .toast__action-button {
+    @apply text-sm font-medium text-blue-600 hover:text-blue-700;
+    @apply focus:outline-none focus:underline;
+  }
+
+  .toast__close-button {
+    @apply text-gray-400 hover:text-gray-600;
+    @apply focus:outline-none focus:text-gray-600;
+  }
+
+  /* ネットワーク状態 */
+  .network-status {
+    @apply fixed top-0 left-0 right-0 z-40;
+  }
+
+  .network-status--offline {
+    @apply bg-red-600 text-white;
+  }
+
+  .network-status__content {
+    @apply flex items-center justify-center p-3;
+  }
+
+  .network-status__icon {
+    @apply mr-2 flex-shrink-0;
+  }
+
+  .network-status__message {
+    @apply text-center;
+  }
+
+  .network-status__title {
+    @apply font-medium;
+  }
+
+  .network-status__description {
+    @apply text-sm opacity-90;
+  }
+
+  /* オフラインフォールバック */
+  .offline-fallback {
+    @apply min-h-screen flex items-center justify-center p-4;
+  }
+
+  .offline-fallback__content {
+    @apply text-center max-w-md;
+  }
+
+  .offline-fallback__icon {
+    @apply mx-auto mb-4 text-gray-400;
+  }
+
+  .offline-fallback__title {
+    @apply text-xl font-semibold text-gray-900 mb-2;
+  }
+
+  .offline-fallback__message {
+    @apply text-gray-600 mb-6;
+  }
+
+  .offline-fallback__retry-button {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-lg;
+    @apply hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20;
+    @apply transition-colors duration-200 touch-target;
+  }
+
+  /* 遅延読み込み画像 */
+  .lazy-image {
+    @apply relative overflow-hidden;
+  }
+
+  .lazy-image__img {
+    @apply w-full h-full object-cover transition-opacity duration-300;
+    @apply opacity-0;
+  }
+
+  .lazy-image__img--loaded {
+    @apply opacity-100;
+  }
+
+  .lazy-image__placeholder {
+    @apply absolute inset-0 flex items-center justify-center bg-gray-100;
+  }
+
+  .lazy-image__placeholder-img {
+    @apply w-full h-full object-cover;
+  }
+
+  .lazy-image__skeleton {
+    @apply w-full h-full bg-gray-200 animate-pulse;
+  }
+
+  /* モバイル対応 */
+  @media (max-width: 640px) {
+    .toast-container {
+      @apply left-4 right-4 max-w-none;
+    }
+    
+    .toast {
+      @apply p-3;
+    }
+    
+    .toast__title {
+      @apply text-sm;
+    }
+    
+    .toast__message {
+      @apply text-xs;
+    }
+  }
 }

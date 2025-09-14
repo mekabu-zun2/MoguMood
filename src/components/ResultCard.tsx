@@ -2,7 +2,8 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, memo, useCallback } from 'react';
+import { LazyImage } from './LazyImage';
 import type { RestaurantResult } from '../types';
 import { formatDistance, formatRating, formatPriceLevel } from '../utils/helpers';
 
@@ -15,9 +16,9 @@ interface ResultCardProps {
 }
 
 /**
- * 検索結果カードコンポーネント
+ * 検索結果カードコンポーネント（メモ化）
  */
-export function ResultCard({
+export const ResultCard = memo(function ResultCard({
   restaurant,
   showDistance = true,
   showStation = false,
@@ -36,16 +37,16 @@ export function ResultCard({
     setImageLoading(false);
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     if (onClick) {
       onClick(restaurant);
     }
-  };
+  }, [onClick, restaurant]);
 
-  const handleGoogleMapsClick = (e: React.MouseEvent) => {
+  const handleGoogleMapsClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     window.open(restaurant.googleMapsUrl, '_blank', 'noopener,noreferrer');
-  };
+  }, [restaurant.googleMapsUrl]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -70,21 +71,31 @@ export function ResultCard({
       {/* 画像セクション */}
       <div className="result-card__image-container">
         {primaryImage && !imageError ? (
-          <>
-            {imageLoading && (
-              <div className="result-card__image-placeholder">
-                <div className="result-card__image-spinner" />
+          <LazyImage
+            src={primaryImage}
+            alt={`${restaurant.name}の写真`}
+            className="result-card__image"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            fallback={
+              <div className="result-card__image-fallback">
+                <svg
+                  className="result-card__fallback-icon"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
               </div>
-            )}
-            <img
-              src={primaryImage}
-              alt={`${restaurant.name}の写真`}
-              className={`result-card__image ${imageLoading ? 'result-card__image--loading' : ''}`}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-              loading="lazy"
-            />
-          </>
+            }
+          />
         ) : (
           <div className="result-card__image-fallback">
             <svg
@@ -233,10 +244,10 @@ export function ResultCard({
       </div>
     </div>
   );
-}
+});
 
 /**
- * コンパクトな検索結果カードコンポーネント
+ * コンパクトな検索結果カードコンポーネント（メモ化）
  */
 interface CompactResultCardProps {
   restaurant: RestaurantResult;
@@ -244,21 +255,21 @@ interface CompactResultCardProps {
   className?: string;
 }
 
-export function CompactResultCard({
+export const CompactResultCard = memo(function CompactResultCard({
   restaurant,
   onClick,
   className = '',
 }: CompactResultCardProps) {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (onClick) {
       onClick(restaurant);
     }
-  };
+  }, [onClick, restaurant]);
 
-  const handleGoogleMapsClick = (e: React.MouseEvent) => {
+  const handleGoogleMapsClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     window.open(restaurant.googleMapsUrl, '_blank', 'noopener,noreferrer');
-  };
+  }, [restaurant.googleMapsUrl]);
 
   return (
     <div
@@ -322,7 +333,7 @@ export function CompactResultCard({
       </button>
     </div>
   );
-}
+});
 
 /**
  * レストランタイプを日本語に変換

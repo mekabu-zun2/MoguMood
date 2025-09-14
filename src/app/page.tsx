@@ -2,14 +2,19 @@
 
 import { useState } from 'react';
 import { SearchForm, ResultList, ErrorMessage, Loader } from '../components';
+import { SkipLink, LiveRegion, Announcer } from '../components/AccessibilityUtils';
+import { ToastProvider, useToast } from '../components/ToastNotification';
+import { NetworkStatus, AutoRetry, useNetworkStatus } from '../components/NetworkStatus';
 import { usePlacesSearch } from '../hooks';
 import type { RestaurantResult, SearchMode } from '../types';
 
-export default function Home() {
+function HomeContent() {
   const [searchResults, setSearchResults] = useState<RestaurantResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [announceMessage, setAnnounceMessage] = useState('');
+  const [lastSearchParams, setLastSearchParams] = useState<any>(null);
 
   const {
     results,
@@ -20,6 +25,9 @@ export default function Home() {
     clearError,
   } = usePlacesSearch();
 
+  const { addToast } = useToast();
+  const { isOnline } = useNetworkStatus();
+
   // 検索実行
   const handleSearch = async (searchParams: {
     mode: SearchMode;
@@ -29,9 +37,19 @@ export default function Home() {
     stationCount?: number;
     searchQuery: string;
   }) => {
+    if (!isOnline) {
+      addToast({
+        type: 'error',
+        title: 'オフライン',
+        message: 'インターネット接続を確認してください',
+      });
+      return;
+    }
+
     setIsSearching(true);
     setSearchError(null);
     setHasSearched(true);
+    setLastSearchParams(searchParams);
     clearResults();
     clearError();
 
@@ -46,11 +64,43 @@ export default function Home() {
 
       const results = await searchRestaurants(searchRequest);
       setSearchResults(results);
+      setAnnounceMessage(`検索が完了しました。${results.length}件の飲食店が見つかりました。`);
+      
+      if (results.length > 0) {
+        addToast({
+          type: 'success',
+          message: `${results.length}件の飲食店が見つかりました`,
+          duration: 3000,
+        });
+      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '検索に失敗しました';
       setSearchError(errorMessage);
+      setAnnounceMessage(`検索でエラーが発生しました: ${errorMessage}`);
+      
+      addToast({
+        type: 'error',
+        title: '検索エラー',
+        message: errorMessage,
+        action: {
+          label: '再試行',
+          onClick: () => lastSearchParams && handleSearch(lastSearchParams),
+        },
+      });
     } finally {
       setIsSearching(false);
+    }
+  };
+
+  // ネットワーク復旧時の自動リトライ
+  const handleNetworkRetry = () => {
+    if (lastSearchParams && searchError) {
+      addToast({
+        type: 'info',
+        message: '接続が復旧しました。検索を再実行しています...',
+        duration: 2000,
+      });
+      handleSearch(lastSearchParams);
     }
   };
 
@@ -66,8 +116,36 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* ネットワーク状態監視 */}
+      <NetworkStatus 
+        onOnline={() => {
+          addToast({
+            type: 'success',
+            message: 'インターネット接続が復旧しました',
+            duration: 3000,
+          });
+        }}
+        onOffline={() => {
+          addToast({
+            type: 'warning',
+            title: 'オフライン',
+            message: 'インターネット接続が切断されました',
+            duration: 0, // 手動で閉じるまで表示
+          });
+        }}
+      />
+
+      {/* 自動リトライ */}
+      <AutoRetry onRetry={handleNetworkRetry} />
+
+      {/* スキップリンク */}
+      <SkipLink href="#main-content">メインコンテンツにスキップ</SkipLink>
+      
+      {/* アナウンサー */}
+      <Announcer message={announceMessage} />
+      
       {/* ヘッダー */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white shadow-sm border-b border-gray-200" role="banner">
         <div className="container mx-auto px-4 py-6">
           <div className="max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -81,7 +159,7 @@ export default function Home() {
       </header>
 
       {/* メインコンテンツ */}
-      <main className="container mx-auto px-4 py-8">
+      <main id="main-content" className="container mx-auto px-4 py-8" role="main">
         <div className="max-w-2xl mx-auto">
           {/* 検索フォーム */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
@@ -119,17 +197,22 @@ export default function Home() {
 
           {/* 検索結果 */}
           {showResults && (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              <ResultList
-                results={currentResults}
-                loading={isSearching || placesLoading}
-                error={currentError}
-                onResultClick={handleResultClick}
-                showDistance={true}
-                showStation={false} // 将来的に駅数モードの場合はtrueに
-                emptyMessage="条件に合う飲食店が見つかりませんでした。気分の表現を変えるか、検索範囲を広げてみてください。"
-              />
-            </div>
+            <section 
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
+              aria-label="検索結果"
+            >
+              <LiveRegion politeness="polite">
+                <ResultList
+                  results={currentResults}
+                  loading={isSearching || placesLoading}
+                  error={currentError}
+                  onResultClick={handleResultClick}
+                  showDistance={true}
+                  showStation={false} // 将来的に駅数モードの場合はtrueに
+                  emptyMessage="条件に合う飲食店が見つかりませんでした。気分の表現を変えるか、検索範囲を広げてみてください。"
+                />
+              </LiveRegion>
+            </section>
           )}
 
           {/* 初期状態のメッセージ */}
@@ -164,7 +247,7 @@ export default function Home() {
       </main>
 
       {/* フッター */}
-      <footer className="bg-white border-t border-gray-200 mt-16">
+      <footer className="bg-white border-t border-gray-200 mt-16" role="contentinfo">
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-2xl mx-auto text-center text-sm text-gray-500">
             <p>
@@ -175,5 +258,13 @@ export default function Home() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <ToastProvider>
+      <HomeContent />
+    </ToastProvider>
   );
 }
