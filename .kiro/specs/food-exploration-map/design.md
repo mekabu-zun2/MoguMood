@@ -2,7 +2,7 @@
 
 ## 概要
 
-「ご飯探索マップ」は、React + TypeScript + Vite + TailwindCSS + Dockerで構築されるスマートフォン対応のWebアプリケーションです。ユーザーの気分をGemini APIで検索タグに変換し、Google Places APIで飲食店を検索する機能を提供します。セキュリティを考慮してAPIキーはバックエンド経由で呼び出し、モバイルファーストのUXを実現します。
+「ご飯探索マップ」は、Next.js + TypeScript + TailwindCSS + Dockerで構築されるスマートフォン対応のWebアプリケーションです。ユーザーの気分をGemini APIで検索タグに変換し、Google Places APIで飲食店を検索する機能を提供します。Next.js API Routesを活用してAPIキーを安全に管理し、モバイルファーストのUXを実現します。
 
 ## アーキテクチャ
 
@@ -25,9 +25,9 @@ graph TB
 
 ### レイヤー構成
 
-1. **プレゼンテーション層**: React + TypeScript + TailwindCSS
+1. **プレゼンテーション層**: Next.js + React + TypeScript + TailwindCSS
 2. **ビジネスロジック層**: Custom Hooks + Context API
-3. **データアクセス層**: 軽量バックエンドAPI（Express.js + TypeScript）
+3. **データアクセス層**: Next.js API Routes
 4. **外部API層**: Gemini API, Google Places API, Google Directions API
 
 ## コンポーネントとインターフェース
@@ -71,22 +71,29 @@ src/
 ### バックエンド API構成
 
 ```
-api/
-├── routes/
-│   ├── mood.ts                 # 気分変換エンドポイント
-│   ├── places.ts               # 飲食店検索エンドポイント
-│   └── stations.ts             # 駅検索エンドポイント
-├── services/
-│   ├── geminiService.ts        # Gemini API呼び出し
-│   ├── placesService.ts        # Google Places API呼び出し
-│   └── directionsService.ts    # Google Directions API呼び出し
-├── middleware/
-│   ├── cors.ts                 # CORS設定
-│   └── errorHandler.ts         # エラーハンドリング
-├── types/
-│   ├── api.ts                  # API関連の型定義
-│   └── external.ts             # 外部API関連の型定義
-└── server.ts                   # Express サーバー
+src/
+├── app/
+│   ├── api/
+│   │   ├── mood/
+│   │   │   └── route.ts        # 気分変換エンドポイント
+│   │   ├── places/
+│   │   │   └── route.ts        # 飲食店検索エンドポイント
+│   │   └── stations/
+│   │       └── route.ts        # 駅検索エンドポイント
+│   ├── globals.css             # グローバルスタイル
+│   ├── layout.tsx              # ルートレイアウト
+│   └── page.tsx                # ホームページ
+├── components/                 # UIコンポーネント
+├── hooks/                      # カスタムフック
+├── lib/
+│   ├── services/
+│   │   ├── geminiService.ts    # Gemini API呼び出し
+│   │   ├── placesService.ts    # Google Places API呼び出し
+│   │   └── directionsService.ts # Google Directions API呼び出し
+│   └── utils/
+│       ├── constants.ts        # 定数定義
+│       └── helpers.ts          # ヘルパー関数
+└── types/                      # 型定義
 ```
 
 ### 主要インターフェース
@@ -270,14 +277,31 @@ interface SearchParams {
 ### Docker環境設計
 
 1. **開発環境**
-   - ホットリロード対応
+   - Next.js開発サーバーのホットリロード対応
    - ボリュームマウントでファイル同期
    - 環境変数の適切な管理
 
 2. **本番環境想定**
-   - マルチステージビルド
-   - 最小限のイメージサイズ
+   - Next.js最適化ビルド
+   - マルチステージビルドで最小限のイメージサイズ
    - セキュリティベストプラクティス
+
+### Next.js の利点
+
+1. **統合された開発体験**
+   - フロントエンドとAPIが同一プロジェクト
+   - 型安全性がフロントエンド・バックエンド間で保証
+   - 統一されたビルド・デプロイプロセス
+
+2. **将来の拡張性**
+   - 認証機能（NextAuth.js）の簡単な統合
+   - データベース（Prisma）との親和性
+   - Vercelでの簡単デプロイとスケーリング
+
+3. **パフォーマンス最適化**
+   - 自動的なコード分割
+   - 画像最適化
+   - SSR/SSG対応（必要に応じて）
 ## Typ
 eScript設定
 
