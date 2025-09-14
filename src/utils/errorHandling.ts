@@ -32,7 +32,10 @@ export function handleGeolocationError(error: GeolocationPositionError): ApiErro
     code,
     message,
     details: {
-      originalError: error,
+      originalError: {
+        message: error.message,
+        code: error.code,
+      },
       errorCode: error.code,
     },
   };
@@ -47,7 +50,13 @@ export function handleFetchError(error: unknown): ApiError {
     return {
       code: 'NETWORK_ERROR',
       message: ERROR_MESSAGES.NETWORK_ERROR,
-      details: { originalError: error },
+      details: { 
+        originalError: {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+        }
+      },
     };
   }
   
@@ -55,14 +64,20 @@ export function handleFetchError(error: unknown): ApiError {
     return {
       code: 'UNKNOWN_ERROR',
       message: error.message || ERROR_MESSAGES.API_ERROR,
-      details: { originalError: error },
+      details: { 
+        originalError: {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+        }
+      },
     };
   }
   
   return {
     code: 'UNKNOWN_ERROR',
     message: ERROR_MESSAGES.API_ERROR,
-    details: { originalError: error },
+    details: { originalError: String(error) },
   };
 }
 

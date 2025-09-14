@@ -256,6 +256,8 @@ function validatePlacesRequest(body: any): ApiResponse<null> | null {
  * APIエラーハンドリング
  */
 function handleApiError(error: unknown): NextResponse {
+  console.error('Places API Error:', error);
+  
   let apiError: ApiError;
   
   if (error && typeof error === 'object' && 'code' in error) {
@@ -264,7 +266,13 @@ function handleApiError(error: unknown): NextResponse {
     apiError = {
       code: 'UNKNOWN_ERROR',
       message: error.message || 'サーバーエラーが発生しました',
-      details: { originalError: error.message },
+      details: { 
+        originalError: {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+        }
+      },
     };
   } else {
     apiError = {

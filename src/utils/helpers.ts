@@ -123,14 +123,26 @@ export async function withRetry<T>(
     try {
       return await fn();
     } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
+      console.error(`Attempt ${attempt}/${maxAttempts} failed:`, error);
+      
+      // エラーオブジェクトを適切に処理
+      if (error instanceof Error) {
+        lastError = error;
+      } else if (error && typeof error === 'object' && 'message' in error) {
+        lastError = new Error(String(error.message));
+      } else {
+        lastError = new Error(String(error));
+      }
       
       if (attempt === maxAttempts) {
+        console.error('All retry attempts failed, throwing last error:', lastError);
         throw lastError;
       }
       
       // 指数バックオフでリトライ間隔を増加
-      await sleep(delay * Math.pow(2, attempt - 1));
+      const waitTime = delay * Math.pow(2, attempt - 1);
+      console.log(`Waiting ${waitTime}ms before retry...`);
+      await sleep(waitTime);
     }
   }
   
