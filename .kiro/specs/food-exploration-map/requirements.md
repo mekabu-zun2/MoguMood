@@ -2,55 +2,55 @@
 
 ## はじめに
 
-「ご飯探索マップ」は、ユーザーの気分と移動許容範囲に基づいて周辺の飲食店を検索し、直接Googleマップに遷移できるスマートフォン対応のWebアプリケーションです。現在地から半径指定または最寄り駅からの駅数指定で検索でき、Gemini APIを活用して曖昧な気分表現を適切な検索タグに変換します。
+「ご飯探索マップ」は、ユーザーの気分と移動許容範囲に基づいて周辺の飲食店を検索し、直接 Google マップに遷移できるスマートフォン対応の Web アプリケーションです。現在地から半径指定または最寄り駅からの駅数指定で検索でき、Gemini API を活用して曖昧な気分表現を適切な検索タグに変換します。
 
 ## 要件
 
-### 要件1
+### 要件 1
 
 **ユーザーストーリー:** アプリ利用者として、検索モードを選択できるようにしたい。そうすることで、自分の移動手段や好みに応じて最適な検索方法を使える。
 
 #### 受入基準
 
-1. WHEN アプリを開いた時 THEN システムは画面上部にモード切替UIを表示する SHALL
-2. WHEN モード切替UIを表示する時 THEN システムは「半径モード」と「駅数モード」の選択肢を提供する SHALL
+1. WHEN アプリを開いた時 THEN システムは画面上部にモード切替 UI を表示する SHALL
+2. WHEN モード切替 UI を表示する時 THEN システムは「半径モード」と「駅数モード」の選択肢を提供する SHALL
 3. WHEN アプリを初回起動した時 THEN システムはデフォルトで半径モードを選択状態にする SHALL
 4. WHEN ユーザーがモードを切り替えた時 THEN システムは対応する入力フォームを表示する SHALL
 
-### 要件2
+### 要件 2
 
 **ユーザーストーリー:** アプリ利用者として、自分の気分を自由に入力できるようにしたい。そうすることで、曖昧な表現でも適切な飲食店を見つけられる。
 
 #### 受入基準
 
 1. WHEN ユーザーが気分入力フィールドにアクセスした時 THEN システムは自由テキスト入力を受け付ける SHALL
-2. WHEN ユーザーが気分を入力した時 THEN システムはGemini APIを使用して検索タグに変換する SHALL
+2. WHEN ユーザーが気分を入力した時 THEN システムは Gemini API を使用して検索タグに変換する SHALL
 3. WHEN 気分の変換が完了した時 THEN システムは変換されたタグを検索に使用する SHALL
 4. WHEN 検索ボタンが押された時 THEN システムは入力された気分を処理して検索を実行する SHALL
 
-### 要件3
+### 要件 3
 
 **ユーザーストーリー:** アプリ利用者として、現在地から指定した半径内の飲食店を検索したい。そうすることで、徒歩や車での移動範囲内の店舗を見つけられる。
 
 #### 受入基準
 
 1. WHEN 半径モードが選択された時 THEN システムは半径指定スライダー（500m〜5000m）を表示する SHALL
-2. WHEN 検索が実行された時 THEN システムはnavigator.geolocationで現在地を取得する SHALL
-3. WHEN 現在地が取得された時 THEN システムはGoogle Places API（Nearby Search）で半径内の飲食店を検索する SHALL
+2. WHEN 検索が実行された時 THEN システムは navigator.geolocation で現在地を取得する SHALL
+3. WHEN 現在地が取得された時 THEN システムは Google Places API（Nearby Search）で半径内の飲食店を検索する SHALL
 4. WHEN 位置情報の取得に失敗した時 THEN システムはエラーメッセージを表示する SHALL
 
-### 要件4
+### 要件 4
 
 **ユーザーストーリー:** アプリ利用者として、最寄り駅から指定した駅数分の範囲内の飲食店を検索したい。そうすることで、電車での移動範囲内の店舗を見つけられる。
 
 #### 受入基準
 
-1. WHEN 駅数モードが選択された時 THEN システムは駅数指定UI（1〜5駅）を表示する SHALL
-2. WHEN 検索が実行された時 THEN システムは現在地から最寄り駅をGoogle Places API（type=train_station）で特定する SHALL
-3. WHEN 最寄り駅が特定された時 THEN システムはGoogle Directions APIを使用して指定駅数分の駅リストを取得する SHALL
-4. WHEN 駅リストが取得された時 THEN システムは各駅の緯度経度でGoogle Places API検索を実行する SHALL
+1. WHEN 駅数モードが選択された時 THEN システムは駅数指定 UI（1〜5 駅）を表示する SHALL
+2. WHEN 検索が実行された時 THEN システムは現在地から最寄り駅を Google Places API（type=train_station）で特定する SHALL
+3. WHEN 最寄り駅が特定された時 THEN システムは Google Directions API を使用して指定駅数分の駅リストを取得する SHALL
+4. WHEN 駅リストが取得された時 THEN システムは各駅の緯度経度で Google Places API 検索を実行する SHALL
 
-### 要件5
+### 要件 5
 
 **ユーザーストーリー:** アプリ利用者として、検索結果を見やすい形で確認したい。そうすることで、店舗の基本情報を素早く把握できる。
 
@@ -59,48 +59,48 @@
 1. WHEN 検索結果が取得された時 THEN システムは店名、ジャンル、距離/駅名、評価、写真を表示する SHALL
 2. WHEN 半径モードの結果を表示する時 THEN システムは現在地からの距離を表示する SHALL
 3. WHEN 駅数モードの結果を表示する時 THEN システムは最寄り駅名を表示する SHALL
-4. WHEN 評価を表示する時 THEN システムはGoogle Places APIのratingを使用する SHALL
-5. WHEN 写真を表示する時 THEN システムはGoogle Places Photo APIから画像を取得する SHALL
+4. WHEN 評価を表示する時 THEN システムは Google Places API の rating を使用する SHALL
+5. WHEN 写真を表示する時 THEN システムは Google Places Photo API から画像を取得する SHALL
 
-### 要件6
+### 要件 6
 
-**ユーザーストーリー:** アプリ利用者として、気になる店舗の詳細をGoogleマップで確認したい。そうすることで、ルート検索や詳細情報を確認できる。
+**ユーザーストーリー:** アプリ利用者として、気になる店舗の詳細を Google マップで確認したい。そうすることで、ルート検索や詳細情報を確認できる。
 
 #### 受入基準
 
-1. WHEN 各検索結果カードを表示する時 THEN システムは「Googleマップで開く」ボタンを配置する SHALL
-2. WHEN 「Googleマップで開く」ボタンが押された時 THEN システムは適切なGoogleマップURLに遷移する SHALL
-3. WHEN GoogleマップURLを生成する時 THEN システムは`https://www.google.com/maps/search/?api=1&query=店名&query_place_id=PLACE_ID`形式を使用する SHALL
+1. WHEN 各検索結果カードを表示する時 THEN システムは「Google マップで開く」ボタンを配置する SHALL
+2. WHEN 「Google マップで開く」ボタンが押された時 THEN システムは適切な Google マップ URL に遷移する SHALL
+3. WHEN Google マップ URL を生成する時 THEN システムは`https://www.google.com/maps/search/?api=1&query=店名&query_place_id=PLACE_ID`形式を使用する SHALL
 
-### 要件7
+### 要件 7
 
 **ユーザーストーリー:** スマートフォンユーザーとして、モバイル端末で快適にアプリを使用したい。そうすることで、外出先でも簡単に飲食店を検索できる。
 
 #### 受入基準
 
-1. WHEN アプリをスマートフォンで表示する時 THEN システムは縦スクロール1カラムレイアウトを使用する SHALL
-2. WHEN タッチ操作可能な要素を配置する時 THEN システムはタップ領域を44px以上にする SHALL
+1. WHEN アプリをスマートフォンで表示する時 THEN システムは縦スクロール 1 カラムレイアウトを使用する SHALL
+2. WHEN タッチ操作可能な要素を配置する時 THEN システムはタップ領域を 44px 以上にする SHALL
 3. WHEN 画面サイズが変更された時 THEN システムはレスポンシブデザインで適切に表示する SHALL
 4. WHEN ローディング中の時 THEN システムは適切なローディング表示を行う SHALL
 
-### 要件8
+### 要件 8
 
-**ユーザーストーリー:** 開発者として、APIキーを安全に管理したい。そうすることで、セキュリティリスクを最小限に抑えられる。
-
-#### 受入基準
-
-1. WHEN APIキーを設定する時 THEN システムは.envファイルで管理する SHALL
-2. WHEN Docker環境で実行する時 THEN システムは環境変数としてAPIキーを渡す SHALL
-3. WHEN フロントエンドからAPI呼び出しを行う時 THEN システムは軽量バックエンド経由でAPIを呼び出す SHALL
-4. WHEN APIキーをフロントエンドで使用する時 THEN システムは直接記述しない SHALL
-
-### 要件9
-
-**ユーザーストーリー:** 開発者として、Docker環境で効率的に開発したい。そうすることで、環境構築の手間を省き、一貫した開発環境を維持できる。
+**ユーザーストーリー:** 開発者として、API キーを安全に管理したい。そうすることで、セキュリティリスクを最小限に抑えられる。
 
 #### 受入基準
 
-1. WHEN Docker環境を構築する時 THEN システムはNode 20 Alpineベースを使用する SHALL
+1. WHEN API キーを設定する時 THEN システムは.env ファイルで管理する SHALL
+2. WHEN Docker 環境で実行する時 THEN システムは環境変数として API キーを渡す SHALL
+3. WHEN フロントエンドから API 呼び出しを行う時 THEN システムは軽量バックエンド経由で API を呼び出す SHALL
+4. WHEN API キーをフロントエンドで使用する時 THEN システムは直接記述しない SHALL
+
+### 要件 9
+
+**ユーザーストーリー:** 開発者として、Docker 環境で効率的に開発したい。そうすることで、環境構築の手間を省き、一貫した開発環境を維持できる。
+
+#### 受入基準
+
+1. WHEN Docker 環境を構築する時 THEN システムは Node 20 Alpine ベースを使用する SHALL
 2. WHEN 開発中にコード変更を行う時 THEN システムはホットリロードで即座に反映する SHALL
-3. WHEN ローカル変更を行う時 THEN システムはvolumesで変更を即座に反映する SHALL
-4. WHEN 環境変数を設定する時 THEN システムはdocker-compose.ymlで管理する SHALL
+3. WHEN ローカル変更を行う時 THEN システムは volumes で変更を即座に反映する SHALL
+4. WHEN 環境変数を設定する時 THEN システムは docker-compose.yml で管理する SHALL
