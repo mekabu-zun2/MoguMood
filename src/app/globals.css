@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* モバイルファーストのベーススタイル */
+@layer base {
+  html {
+    font-size: 16px;
+  }
+  
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+}
+
+/* タッチフレンドリーなコンポーネント (要件 7.2) */
+@layer components {
+  .touch-target {
+    @apply min-h-touch min-w-touch;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-600 text-white px-4 py-3 rounded-lg font-medium touch-target hover:bg-blue-700 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium touch-target hover:bg-gray-300 transition-colors;
+  }
+}
