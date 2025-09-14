@@ -89,6 +89,7 @@ docker-compose up --build
 - **Jest** - テストフレームワーク
 - **React Testing Library** - コンポーネントテスト
 - **MSW** - API モック
+- **GitHub Actions** - CI/CD パイプライン
 
 ## 🧪 テスト
 
@@ -102,12 +103,49 @@ docker-compose run --rm app npm run test:watch
 
 # カバレッジ付きテスト
 docker-compose run --rm app npm run test:coverage
+
+# CI環境と同じテスト実行
+docker-compose run --rm app npm run ci
 ```
 
 ### テスト構成
 - **ユニットテスト**: ユーティリティ関数、カスタムフック
 - **コンポーネントテスト**: React コンポーネント
 - **統合テスト**: API エンドポイント、検索フロー
+
+## 🔄 CI/CD
+
+### GitHub Actions ワークフロー
+
+このプロジェクトでは、mainブランチへのマージ前に必須のチェックを実行します：
+
+#### 必須チェック項目
+- ✅ **TypeScript型チェック** - `npm run type-check`
+- ✅ **ESLintチェック** - `npm run lint`
+- ✅ **セキュリティ監査** - `npm audit`
+- ✅ **ユニットテスト** - `npm run test:ci`
+- ✅ **ビルドテスト** - `npm run build`
+- ✅ **インテグレーションテスト** - API動作確認
+
+#### ブランチ保護ルール
+- mainブランチへの直接プッシュは禁止
+- プルリクエスト必須
+- すべてのCIチェックが成功する必要がある
+- 1人以上の承認が必要
+
+#### ワークフロー構成
+```
+.github/workflows/
+├── pr-checks.yml      # 必須チェック項目
+├── ci.yml            # CIステータス統合
+└── generate-lockfile.yml # package-lock.json生成
+```
+
+### ローカルでのCI確認
+```bash
+# CIと同じチェックをローカルで実行
+npm run ci
+```
 
 ## 🚢 本番環境デプロイ
 
