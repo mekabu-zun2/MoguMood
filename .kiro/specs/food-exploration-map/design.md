@@ -2,7 +2,7 @@
 
 ## 概要
 
-「ご飯探索マップ」は、React + Vite + TailwindCSS + Dockerで構築されるスマートフォン対応のWebアプリケーションです。ユーザーの気分をGemini APIで検索タグに変換し、Google Places APIで飲食店を検索する機能を提供します。セキュリティを考慮してAPIキーはバックエンド経由で呼び出し、モバイルファーストのUXを実現します。
+「ご飯探索マップ」は、React + TypeScript + Vite + TailwindCSS + Dockerで構築されるスマートフォン対応のWebアプリケーションです。ユーザーの気分をGemini APIで検索タグに変換し、Google Places APIで飲食店を検索する機能を提供します。セキュリティを考慮してAPIキーはバックエンド経由で呼び出し、モバイルファーストのUXを実現します。
 
 ## アーキテクチャ
 
@@ -25,9 +25,9 @@ graph TB
 
 ### レイヤー構成
 
-1. **プレゼンテーション層**: React + TailwindCSS
+1. **プレゼンテーション層**: React + TypeScript + TailwindCSS
 2. **ビジネスロジック層**: Custom Hooks + Context API
-3. **データアクセス層**: 軽量バックエンドAPI（Express.js）
+3. **データアクセス層**: 軽量バックエンドAPI（Express.js + TypeScript）
 4. **外部API層**: Gemini API, Google Places API, Google Directions API
 
 ## コンポーネントとインターフェース
@@ -37,31 +37,35 @@ graph TB
 ```
 src/
 ├── components/
-│   ├── SearchForm.jsx          # 検索フォーム（モード切替含む）
-│   ├── ModeToggle.jsx          # モード切替UI
-│   ├── MoodInput.jsx           # 気分入力フィールド
-│   ├── RadiusSlider.jsx        # 半径指定スライダー
-│   ├── StationCounter.jsx      # 駅数指定UI
-│   ├── ResultCard.jsx          # 検索結果カード
-│   ├── ResultList.jsx          # 結果一覧表示
-│   ├── Loader.jsx              # ローディング表示
-│   └── ErrorMessage.jsx        # エラー表示
+│   ├── SearchForm.tsx          # 検索フォーム（モード切替含む）
+│   ├── ModeToggle.tsx          # モード切替UI
+│   ├── MoodInput.tsx           # 気分入力フィールド
+│   ├── RadiusSlider.tsx        # 半径指定スライダー
+│   ├── StationCounter.tsx      # 駅数指定UI
+│   ├── ResultCard.tsx          # 検索結果カード
+│   ├── ResultList.tsx          # 結果一覧表示
+│   ├── Loader.tsx              # ローディング表示
+│   └── ErrorMessage.tsx        # エラー表示
 ├── hooks/
-│   ├── useGeolocation.js       # 位置情報取得
-│   ├── useMoodConversion.js    # 気分→タグ変換
-│   ├── usePlacesSearch.js      # 飲食店検索
-│   ├── useStationSearch.js     # 駅検索・ルート取得
-│   └── useSearchState.js       # 検索状態管理
+│   ├── useGeolocation.ts       # 位置情報取得
+│   ├── useMoodConversion.ts    # 気分→タグ変換
+│   ├── usePlacesSearch.ts      # 飲食店検索
+│   ├── useStationSearch.ts     # 駅検索・ルート取得
+│   └── useSearchState.ts       # 検索状態管理
 ├── context/
-│   └── SearchContext.jsx       # グローバル検索状態
+│   └── SearchContext.tsx       # グローバル検索状態
 ├── services/
-│   └── api.js                  # バックエンドAPI呼び出し
+│   └── api.ts                  # バックエンドAPI呼び出し
+├── types/
+│   ├── search.ts               # 検索関連の型定義
+│   ├── restaurant.ts           # レストラン関連の型定義
+│   └── api.ts                  # API関連の型定義
 ├── utils/
-│   ├── constants.js            # 定数定義
-│   └── helpers.js              # ヘルパー関数
+│   ├── constants.ts            # 定数定義
+│   └── helpers.ts              # ヘルパー関数
 ├── pages/
-│   └── Home.jsx                # メインページ
-└── App.jsx                     # アプリケーションルート
+│   └── Home.tsx                # メインページ
+└── App.tsx                     # アプリケーションルート
 ```
 
 ### バックエンド API構成
@@ -69,17 +73,20 @@ src/
 ```
 api/
 ├── routes/
-│   ├── mood.js                 # 気分変換エンドポイント
-│   ├── places.js               # 飲食店検索エンドポイント
-│   └── stations.js             # 駅検索エンドポイント
+│   ├── mood.ts                 # 気分変換エンドポイント
+│   ├── places.ts               # 飲食店検索エンドポイント
+│   └── stations.ts             # 駅検索エンドポイント
 ├── services/
-│   ├── geminiService.js        # Gemini API呼び出し
-│   ├── placesService.js        # Google Places API呼び出し
-│   └── directionsService.js    # Google Directions API呼び出し
+│   ├── geminiService.ts        # Gemini API呼び出し
+│   ├── placesService.ts        # Google Places API呼び出し
+│   └── directionsService.ts    # Google Directions API呼び出し
 ├── middleware/
-│   ├── cors.js                 # CORS設定
-│   └── errorHandler.js         # エラーハンドリング
-└── server.js                   # Express サーバー
+│   ├── cors.ts                 # CORS設定
+│   └── errorHandler.ts         # エラーハンドリング
+├── types/
+│   ├── api.ts                  # API関連の型定義
+│   └── external.ts             # 外部API関連の型定義
+└── server.ts                   # Express サーバー
 ```
 
 ### 主要インターフェース
@@ -271,3 +278,17 @@ interface SearchParams {
    - マルチステージビルド
    - 最小限のイメージサイズ
    - セキュリティベストプラクティス
+## Typ
+eScript設定
+
+### 型安全性の強化
+- 厳密なTypeScript設定（strict: true）
+- 全てのコンポーネントとフックに適切な型定義
+- API レスポンスの型安全性確保
+- Props の型定義によるコンポーネント間の安全な連携
+
+### 開発体験の向上
+- IntelliSenseによる自動補完
+- コンパイル時のエラー検出
+- リファクタリングの安全性向上
+- 型定義による自己文書化
