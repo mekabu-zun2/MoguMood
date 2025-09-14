@@ -23,8 +23,12 @@ yarn-debug.log*
 yarn-error.log*
 
 # Local env files
-.env
-.env*.local
+.env.local
+.env.production.local
+.env.development.local
+
+# Keep test environment file for CI
+# .env.test
 
 # Vercel
 .vercel

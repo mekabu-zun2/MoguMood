@@ -1,6 +1,13 @@
 import '@testing-library/jest-dom'
 import { server } from './src/__mocks__/server'
 
+// テスト環境用の環境変数を設定
+process.env.NODE_ENV = 'test'
+process.env.GOOGLE_PLACES_API_KEY = 'test_key'
+process.env.GOOGLE_DIRECTIONS_API_KEY = 'test_key'
+process.env.GEMINI_API_KEY = 'test_key'
+process.env.NEXT_PUBLIC_APP_URL = 'http://localhost:3000'
+
 // MSW サーバーの設定
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
