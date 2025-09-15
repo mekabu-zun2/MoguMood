@@ -5,7 +5,9 @@ import { SearchForm, ResultList, ErrorMessage, Loader } from '../components';
 import { SkipLink, LiveRegion, Announcer } from '../components/AccessibilityUtils';
 import { ToastProvider, useToast } from '../components/ToastNotification';
 import { NetworkStatus, AutoRetry, useNetworkStatus } from '../components/NetworkStatus';
+import { SearchErrorBoundary } from '../lib/errors/errorBoundary';
 import { usePlacesSearch } from '../hooks';
+import { useErrorHandler } from '../hooks/useErrorHandler';
 import type { RestaurantResult, SearchMode } from '../types';
 
 function HomeContent() {
@@ -27,6 +29,7 @@ function HomeContent() {
 
   const { addToast } = useToast();
   const { isOnline } = useNetworkStatus();
+  const { showError, clearError: clearGlobalError } = useErrorHandler();
 
   // 検索実行
   const handleSearch = async (searchParams: {
@@ -263,8 +266,10 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <ToastProvider>
-      <HomeContent />
-    </ToastProvider>
+    <SearchErrorBoundary>
+      <ToastProvider>
+        <HomeContent />
+      </ToastProvider>
+    </SearchErrorBoundary>
   );
 }

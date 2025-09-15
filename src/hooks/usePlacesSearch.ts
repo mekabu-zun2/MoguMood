@@ -11,6 +11,8 @@ import type {
   SearchMode 
 } from '../types';
 import { logError } from '../utils';
+import { searchCache } from '../lib/cache/searchCache';
+import { useErrorHandler } from './useErrorHandler';
 
 interface UsePlacesSearchState {
   results: RestaurantResult[];
@@ -59,8 +61,7 @@ export function usePlacesSearch(options: UsePlacesSearchOptions = {}): UsePlaces
     hasMore: false,
   });
 
-  // キャッシュ（メモリ内）
-  const cacheRef = useRef<Map<string, RestaurantResult[]>>(new Map());
+  const { showError } = useErrorHandler();
   
   // 最後の検索リクエストを記録（リトライ・ページネーション用）
   const lastRequestRef = useRef<SearchRequest | null>(null);
@@ -75,11 +76,11 @@ export function usePlacesSearch(options: UsePlacesSearchOptions = {}): UsePlaces
     lastRequestRef.current = request;
 
     // キャッシュキーを生成
-    const cacheKey = generateCacheKey(request);
+    const cacheKey = searchCache.generateKey('places', request);
     
     // 新規検索でキャッシュがある場合
     if (!pageToken && enableCache) {
-      const cached = cacheRef.current.get(cacheKey);
+      const cached = searchCache.get<RestaurantResult[]>(cacheKey);
       if (cached) {
         setState(prev => ({
           ...prev,
@@ -153,7 +154,7 @@ export function usePlacesSearch(options: UsePlacesSearchOptions = {}): UsePlaces
 
       // 新規検索の場合はキャッシュに保存
       if (!pageToken && enableCache) {
-        cacheRef.current.set(cacheKey, newResults);
+        searchCache.set(cacheKey, newResults);
       }
 
       return newResults;
@@ -168,13 +169,14 @@ export function usePlacesSearch(options: UsePlacesSearchOptions = {}): UsePlaces
         hasMore: false,
       }));
 
-      // エラーログ
+      // エラーハンドリング
       const apiError: ApiError = {
         code: 'UNKNOWN_ERROR',
         message: errorMessage,
         details: { request, originalError: error },
       };
       logError(apiError, 'usePlacesSearch');
+      showError(apiError);
 
       return [];
     }
